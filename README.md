@@ -20,10 +20,10 @@ To view or work on this wiki locally, simply clone the repository and open the `
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/0rtizSys/PwC-Wiki
 
 # Navigate to the project directory
-cd your-repo-name
+cd PWC-Wiki
 
 # Open index.html in your browser (example using xdg-open on Linux)
 xdg-open index.html

@@ -3,6 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cards.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PwC Wiki</title>
@@ -13,8 +14,8 @@
         <!-- Secciones dentro del juego ---------------------------------------------------------------->
         <nav class="navbar">
             <ul>
-                <li class="seedsLi"><a href="#">seeds</a></li>
-                <li class="gearsLi"><a href="#">gears</a></li>
+                <li class="seedsLi" data-page="seeds"><a href="#">seeds</a></li>
+                <li class="gearsLi" data-page="gears"><a href="#">gears</a></li>
             </ul>
         </nav>
     </header>
@@ -33,8 +34,8 @@
         </aside>
 
         <main>
-            <!-- Datos principales del juego --------------------------------------------------------------->
-            <div class="main-information">
+            <!-- Game principal sections --------------------------------------------------------------->
+            <div class="main-information" id="content">
                 <section class="hero">
                     <h2>Plant whit Code [BETA]</h2>
                     <p>Plant whit Coding is a game created by the roblox group <br>
@@ -47,5 +48,5 @@
         </main>
     </div>
 </body>
-
+<script src="js/main.js"></script>
 </html>
