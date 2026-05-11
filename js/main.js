@@ -1,5 +1,144 @@
 // =====================
-// DATA - Seeds
+// STATE + CONSTANTS
+// =====================
+const STORAGE_KEYS = {
+    theme: "pwcWikiTheme",
+    language: "pwcWikiLanguage",
+    pendingChanges: "pwcWikiPendingChanges",
+    approvedData: "pwcWikiApprovedData",
+    webhookUrl: "pwcWikiDiscordWebhookUrl",
+};
+
+const SUPPORTED_THEMES = new Set(["dark", "light"]);
+const SUPPORTED_LANGUAGES = new Set(["es", "en"]);
+const ENTITY_COLLECTIONS = new Set(["seeds", "gears", "contributors"]);
+const CHANGE_TYPES = new Set(["add", "edit", "delete"]);
+const IMAGE_FALLBACK = "assets/images/ph.png";
+
+const i18n = {
+    es: {
+        appTitle: "PwC Wiki",
+        home: "Inicio",
+        seeds: "Semillas",
+        gears: "Herramientas",
+        contributors: "Colaboradores",
+        extras: "Extras",
+        discord: "Discord",
+        menu: "Menu",
+        openNavigation: "Abrir navegacion",
+        toggleSidebar: "Alternar barra lateral",
+        themeToggle: "Cambiar tema",
+        languageToggle: "Cambiar idioma",
+        displayControls: "Controles de visualizacion",
+        darkMode: "Oscuro",
+        lightMode: "Claro",
+        heroTitle: "Plant with Code [BETA]",
+        heroCopy: "Plant with Coding es un juego creado por el grupo de Roblox Lated Graham, fundado por TheEmreTutuk, basado en Grow a Garden pero con programacion Luau.",
+        playGame: "Jugar Plant with Coding",
+        seedsTitle: "Semillas",
+        seedsCopy: "Todas las semillas disponibles en Plant with Code.",
+        gearsTitle: "Herramientas",
+        gearsCopy: "Todas las herramientas disponibles en Plant with Code.",
+        learnMore: "Ver mas",
+        costUnavailable: "No disponible",
+        area: "Area",
+        duration: "Duracion",
+        backToSeeds: "Volver a semillas",
+        valuePerKg: "Valor/kg",
+        averageWeight: "Peso prom.",
+        growthTime: "Tiempo de crecimiento",
+        averageProfitHarvest: "Ganancia prom./cosecha",
+        averageProfitMinute: "Ganancia prom./min.",
+        about: "Acerca de {name}",
+        missingAbout: "Pronto se agregara informacion detallada sobre esta planta.",
+        contributorsTitle: "Colaboradores",
+        contributorsCopy: "Filas de ejemplo listas para reemplazar con miembros reales de la comunidad.",
+        avatar: "Avatar",
+        name: "Nombre",
+        role: "Rol",
+        link: "Enlace",
+        wikiFounder: "Fundador de la wiki",
+        dataEditor: "Editor de datos",
+        uiContributor: "Colaborador UI",
+        contributorName: "Nombre del colaborador",
+        robloxProfile: "Perfil de Roblox",
+        profile: "Perfil",
+        extrasTitle: "Extras",
+        extrasCopy: "Tarjetas extra para informacion adicional de la wiki.",
+        imageSlot: "Imagen pendiente",
+        wikiAssistants: "Asistentes de la wiki",
+        wikiAssistantsCopy: "El fundador recibio apoyo de una IA para el diseno web; la wiki NO fue hecha completamente con IA.",
+        extraTitle: "Titulo extra {number}",
+        extraCopy: "Contenido extra pendiente.",
+        imageUnavailable: "Imagen no disponible",
+        invalidRoute: "Ruta no encontrada",
+    },
+    en: {
+        appTitle: "PwC Wiki",
+        home: "Home",
+        seeds: "Seeds",
+        gears: "Gears",
+        contributors: "Contributors",
+        extras: "Extras",
+        discord: "Discord",
+        menu: "Menu",
+        openNavigation: "Open navigation",
+        toggleSidebar: "Toggle sidebar",
+        themeToggle: "Toggle theme",
+        languageToggle: "Change language",
+        displayControls: "Display controls",
+        darkMode: "Dark",
+        lightMode: "Light",
+        heroTitle: "Plant with Code [BETA]",
+        heroCopy: "Plant with Coding is a game created by the Roblox group Lated Graham, founded by TheEmreTutuk, based on Grow a Garden but with Luau coding.",
+        playGame: "Play Plant with Coding",
+        seedsTitle: "Seeds",
+        seedsCopy: "All available seeds in Plant with Code.",
+        gearsTitle: "Gears",
+        gearsCopy: "All available gears in Plant with Code.",
+        learnMore: "Learn more",
+        costUnavailable: "Unavailable",
+        area: "Area",
+        duration: "Duration",
+        backToSeeds: "Back to seeds",
+        valuePerKg: "Value/kg",
+        averageWeight: "Avg. Weight",
+        growthTime: "Growth Time",
+        averageProfitHarvest: "Avg. Profit/Harvest",
+        averageProfitMinute: "Avg. Profit/Min.",
+        about: "About {name}",
+        missingAbout: "Detailed information about this plant will be added soon.",
+        contributorsTitle: "Contributors",
+        contributorsCopy: "Example rows ready to replace with real community members.",
+        avatar: "Avatar",
+        name: "Name",
+        role: "Role",
+        link: "Link",
+        wikiFounder: "Wiki Founder",
+        dataEditor: "Data editor",
+        uiContributor: "UI contributor",
+        contributorName: "Contributor Name",
+        robloxProfile: "Roblox Profile",
+        profile: "Profile",
+        extrasTitle: "Extras",
+        extrasCopy: "Extra cards for additional wiki info.",
+        imageSlot: "Image pending",
+        wikiAssistants: "Wiki Assistants",
+        wikiAssistantsCopy: "The founder received AI support for the web design; the wiki is NOT fully made with AI.",
+        extraTitle: "Extra title {number}",
+        extraCopy: "Pending extra content.",
+        imageUnavailable: "Image unavailable",
+        invalidRoute: "Route not found",
+    },
+};
+
+let currentTheme = readStoredChoice(STORAGE_KEYS.theme, SUPPORTED_THEMES, "dark");
+let currentLanguage = readStoredChoice(STORAGE_KEYS.language, SUPPORTED_LANGUAGES, "es");
+let currentPage = "home";
+let currentSeedName = "";
+
+// =====================
+// DATA
 // =====================
 const seeds = [
     {
@@ -98,17 +237,17 @@ const seeds = [
         about: "Watermelons are visually impressive and financially rewarding. They take up space but their high weight and value per kilogram make them an elite crop."
     },
     {
-        name: "Coconut", type: "Harvestable", cost: 20000, desc: "A tropical fruit with high yield.", img: "assets/images/mushroom.png",
+        name: "Coconut", type: "Harvestable", cost: 20000, desc: "A tropical fruit with high yield.", img: "assets/images/coconut.png",
         stats: { valuePerKg: 9500, avgWeight: "6.00kg", growthTime: "N/A", avgProfitHarvest: 57000, avgProfitMin: "N/A" },
         about: "Coconut palms are the quintessential tropical harvest. They drop extremely heavy coconuts that are highly prized, providing a massive boost to your income."
     },
     {
-        name: "Cacao", type: "Harvestable", cost: 30000, desc: "Premium crop, 16,000 SC/Min profit.", img: "assets/images/coconut.png",
+        name: "Cacao", type: "Harvestable", cost: 30000, desc: "Premium crop, 16,000 SC/Min profit.", img: "assets/images/cacao.png",
         stats: { valuePerKg: 10000, avgWeight: "4.00kg", growthTime: "150.00 sec", avgProfitHarvest: 40000, avgProfitMin: "16,000 SC/Min." },
         about: "Cacao is an exotic, premium plant. Its beans are essential for luxury goods, meaning the market is always willing to pay top dollar for a successful harvest."
     },
     {
-        name: "Mushroom", type: "Crop", cost: 40000, desc: "Rare crop with massive profit potential.", img: "assets/images/cacao.png",
+        name: "Mushroom", type: "Crop", cost: 40000, desc: "Rare crop with massive profit potential.", img: "assets/images/mushroom.png",
         stats: { valuePerKg: 20000, avgWeight: "7.00kg", growthTime: "160.00 sec", avgProfitHarvest: 100000, avgProfitMin: "37,500 SC/Min." },
         about: "Giant mushrooms are rare and incredibly heavy. They thrive in specific conditions and offer some of the highest profit margins in the entire game."
     },
@@ -123,293 +262,778 @@ const seeds = [
         about: "The Lemon tree is the crown jewel of any master farmer. With an astronomical seed cost, it represents the absolute pinnacle of agricultural achievement and wealth."
     },
     {
-        name: "Glitch", type: "Harvestable", cost: "N/A", desc: "Glitch is a extremely rare fruit that only appears on [Unknow]...", img: "assets/images/glitch.png",
+        name: "Glitch", type: "Harvestable", cost: "N/A", desc: "Glitch is an extremely rare fruit that only appears on [Unknown]...", img: "assets/images/glitch.png",
         stats: { valuePerKg: 1111, avgWeight: "4.7kg", growthTime: "N/A secs", avgProfitHarvest: "N/A", avgProfitMin: "N/A SC/Min" },
-        about: "Technically obtainable, but the obtain method is unknow"
+        about: "Technically obtainable, but the obtain method is unknown."
     }
-];
+].map(normalizeSeed);
 
 const gears = [
-    { name: "Watering Can", cost: 100,    effect: "Growth Speed +125%", area: "1x1", duration: "1 Min",  img: "assets/images/watering_can.png" },
-    { name: "Fertilizer",   cost: 750,    effect: "Growth Speed +200%", area: "1x1", duration: "2 Min",  img: "assets/images/fertilizer.png" },
-    { name: "Sprinkler",    cost: 1500,   effect: "Growth Speed +150%", area: "3x3", duration: "10 Min", img: "assets/images/sprinkler.png" },
-    { name: "SprinklerV2",  cost: 5000,   effect: "Growth Speed +200%", area: "5x5", duration: "15 Min", img: "assets/images/sprinklerv2.png" },
-    { name: "SprinklerV3",  cost: 20000,  effect: "Growth Speed +300%", area: "7x7", duration: "20 Min", img: "assets/images/sprinklerv3.png" },
-    { name: "Lightning Rod", cost: 30000, effect: "Attracts Lightning",  area: "1x1", duration: "15 Min", img: "assets/images/lightning_rod.png" },
-];
+    { name: "Watering Can", cost: 100, effect: "Growth Speed +125%", area: "1x1", duration: "1 Min", img: IMAGE_FALLBACK },
+    { name: "Fertilizer", cost: 750, effect: "Growth Speed +200%", area: "1x1", duration: "2 Min", img: IMAGE_FALLBACK },
+    { name: "Sprinkler", cost: 1500, effect: "Growth Speed +150%", area: "3x3", duration: "10 Min", img: IMAGE_FALLBACK },
+    { name: "SprinklerV2", cost: 5000, effect: "Growth Speed +200%", area: "5x5", duration: "15 Min", img: IMAGE_FALLBACK },
+    { name: "SprinklerV3", cost: 20000, effect: "Growth Speed +300%", area: "7x7", duration: "20 Min", img: IMAGE_FALLBACK },
+    { name: "Lightning Rod", cost: 30000, effect: "Attracts Lightning", area: "1x1", duration: "15 Min", img: IMAGE_FALLBACK },
+].map(normalizeGear);
+
+const contributors = [
+    { name: "Zyre", roleKey: "wikiFounder", avatar: "assets/contribuitors/zyrepfp.jpg", url: "https://www.roblox.com/users/1622167860/profile", linkKey: "robloxProfile" },
+    { nameKey: "contributorName", roleKey: "dataEditor", avatarText: "B", url: "", linkKey: "profile" },
+    { nameKey: "contributorName", roleKey: "uiContributor", avatarText: "C", url: "", linkKey: "profile" },
+].map(normalizeContributor);
+
+const wikiData = { seeds, gears, contributors };
+loadApprovedWikiData();
 
 // =====================
-// PAGES - contenido de cada pagina
+// HELPERS
 // =====================
-const pages = {
+function readStoredChoice(key, allowedValues, fallback) {
+    try {
+        const stored = localStorage.getItem(key);
+        return allowedValues.has(stored) ? stored : fallback;
+    } catch {
+        return fallback;
+    }
+}
 
-    // Pagina de inicio (hero)
-    home: `
-        <section class="hero">
-            <h2>Plant with Code [BETA]</h2>
-            <p>Plant with Coding is a game created by the Roblox group
-            Lated Graham, founded by TheEmreTutuk, which is based
-            on Grow a Garden but with Luau coding.</p>
-            <img class="imgg" src="assets/images/image.webp" alt="img">
-            <button><a href="https://www.roblox.com/games/122761763017872/Plant-with-Coding">Play Plant with Coding</a></button>
-        </section>
-    `,
+function safeText(value, fallback = "") {
+    if (value === null || value === undefined) return fallback;
+    return String(value).replace(/[\u0000-\u001f\u007f]/g, "").trim();
+}
 
-    // Pagina de seeds - se genera dinamicamente desde el array
-    seeds: `
-    <section class="hero">
-        <h2>Seeds</h2>
-        <p>All available seeds in Plant with Code.</p>
-    </section>
-    <div class="seeds-grid">
-        ${seeds.map(seed => `
-            <div class="seed-card">
-                <div class="seed-info">
-                    <div class="seed-card-header">
-                        <span class="seed-type ${seed.type.toLowerCase()}">${seed.type}</span>
-                        <span class="seed-cost">${seed.cost.toLocaleString()} SC</span>
-                        <h2>${seed.name}</h2>
-                    </div>
-                    <p class="seed-desc"> ${seed.desc}</p>
-                    <div class="seed-footer">
-                        
-                        <button onclick="navigateToSeed('${seed.name}')" class="seed-btn">Learn more</button>
-                    </div>
-                </div>
-                <img class="seed-img" src="${seed.img}" alt="${seed.name}">
-            </div>
-        `).join('')}
-    </div>
-    `,
+function safeNumber(value, fallback = "N/A") {
+    if (value === "N/A") return value;
+    const number = Number(value);
+    return Number.isFinite(number) && number >= 0 ? number : fallback;
+}
 
-    // Pagina para las Gears
-    gears: `
-        <section class="hero">
-            <h2>Gears</h2>
-            <p>All available gears in Plant with Code.</p>
-        </section>
-        <div class="seeds-grid">
-            ${gears.map(gear => `
-                <div class="seed-card">
-                    <div class="seed-info">
-                        <div class="seed-card-header">
-                            <span class="seed-cost">${gear.cost.toLocaleString()} SC</span>
-                            <h2>${gear.name}</h2>
-                        </div>
-                        <p class="seed-desc">${gear.effect}</p>
-                        <div class="seed-footer">
-                            <span class="seed-type crop">Area: ${gear.area}</span>
-                            <span class="seed-type harvestable">⏱ ${gear.duration}</span>
-                        </div>
-                    </div>
-                    <img class="seed-img" src="${gear.img}" alt="${gear.name}">
-                </div>
-            `).join('')}
-        </div>
-    `,
+function safeUrl(value, fallback = "") {
+    const url = safeText(value);
+    if (!url) return fallback;
 
-    contributors: `
-        <section class="page-panel">
-            <h2 class="page-title">Contributors</h2>
-            <p class="page-subtitle">Example rows ready to replace with real community members.</p>
-            <div class="contributors-table-wrap">
-                <table class="contributors-table">
-                    <thead>
-                        <tr>
-                            <th>Avatar</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Link</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="contributor-avatar">Z</span></td>
-                            <td>Zyre</td>
-                            <td>Wiki Founder</td>
-                            <td><a href="https://www.roblox.com/users/1622167860/profile" aria-label="Contributor profile">Roblox Profile</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="contributor-avatar">B</span></td>
-                            <td>Contributor Name</td>
-                            <td>Data editor</td>
-                            <td><a href="#" aria-label="Contributor profile">Profile</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="contributor-avatar">C</span></td>
-                            <td>Contributor Name</td>
-                            <td>UI contributor</td>
-                            <td><a href="#" aria-label="Contributor profile">Profile</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    `,
+    try {
+        const parsed = new URL(url, window.location.href);
+        if (parsed.protocol === "http:" || parsed.protocol === "https:") return parsed.href;
+    } catch {
+        return fallback;
+    }
 
-    extras: `
-        <section class="page-panel">
-            <h2 class="page-title">Extras</h2>
-            <p class="page-subtitle">Some extra cards where wiki info goes and i dunno...</p>
-            <div class="extras-grid">
-                ${[1].map(number => `
-                    <article class="extras-card">
-                        <div class="extras-image-slot">Insert claude image</div>
-                        <div class="extras-card-body">
-                            <h3>Wiki Assistants</h3>
-                            <p>So the founder decided to get support on a AI for the web design, the wiki is NOT fully made on AI</p>
-                        </div>
-                    </article>
-                `).join('')}
-                ${[2].map(number => `
-                    <article class="extras-card">
-                        <div class="extras-image-slot">Image ${number}</div>
-                        <div class="extras-card-body">
-                            <h3>Extra title ${number}</h3>
-                            <p>HmkfnsjkdfnsdfAT</p>
-                        </div>
-                    </article>
-                `).join('')}
-            </div>
-        </section>
-    `,
+    return fallback;
+}
+
+function safeAssetPath(value, fallback = IMAGE_FALLBACK) {
+    const path = safeText(value, fallback);
+    if (/^assets\/[\w./-]+\.(png|jpe?g|webp|gif)$/i.test(path)) return path;
+    return fallback;
+}
+
+function normalizeType(type) {
+    const normalized = safeText(type).toLowerCase();
+    return normalized === "harvestable" ? "harvestable" : "crop";
+}
+
+function normalizeStats(stats = {}) {
+    return {
+        valuePerKg: safeNumber(stats.valuePerKg),
+        avgWeight: safeText(stats.avgWeight, "N/A"),
+        growthTime: safeText(stats.growthTime, "N/A"),
+        avgProfitHarvest: safeNumber(stats.avgProfitHarvest),
+        avgProfitMin: safeText(stats.avgProfitMin, "N/A"),
+    };
+}
+
+function normalizeSeed(seed = {}) {
+    return {
+        id: toSlug(seed.id || seed.name),
+        name: safeText(seed.name, "Unknown Seed"),
+        type: normalizeType(seed.type),
+        cost: safeNumber(seed.cost),
+        desc: safeText(seed.desc),
+        img: safeAssetPath(seed.img),
+        stats: normalizeStats(seed.stats),
+        about: safeText(seed.about),
+    };
+}
+
+function normalizeGear(gear = {}) {
+    return {
+        id: toSlug(gear.id || gear.name),
+        name: safeText(gear.name, "Unknown Gear"),
+        cost: safeNumber(gear.cost),
+        effect: safeText(gear.effect),
+        area: safeText(gear.area, "N/A"),
+        duration: safeText(gear.duration, "N/A"),
+        img: safeAssetPath(gear.img),
+    };
+}
+
+function normalizeContributor(contributor = {}) {
+    return {
+        id: toSlug(contributor.id || contributor.name || contributor.nameKey || contributor.avatarText),
+        name: safeText(contributor.name),
+        nameKey: safeText(contributor.nameKey),
+        role: safeText(contributor.role),
+        roleKey: safeText(contributor.roleKey),
+        avatar: safeAssetPath(contributor.avatar, ""),
+        avatarText: safeText(contributor.avatarText, "?").slice(0, 2).toUpperCase(),
+        url: safeUrl(contributor.url),
+        linkKey: safeText(contributor.linkKey),
+    };
+}
+
+function normalizeEntity(collection, entity) {
+    if (collection === "seeds") return normalizeSeed(entity);
+    if (collection === "gears") return normalizeGear(entity);
+    if (collection === "contributors") return normalizeContributor(entity);
+    throw new Error("Unsupported entity collection.");
+}
+
+function normalizeCollection(collection, items) {
+    if (!Array.isArray(items)) return [];
+    return items.map(item => normalizeEntity(collection, item));
+}
+
+function toSlug(value) {
+    return safeText(value, "item")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "item";
+}
+
+function cloneData(value) {
+    return JSON.parse(JSON.stringify(value ?? null));
+}
+
+function loadApprovedWikiData() {
+    try {
+        const storedData = JSON.parse(localStorage.getItem(STORAGE_KEYS.approvedData) || "{}");
+        ENTITY_COLLECTIONS.forEach(collection => {
+            if (!Array.isArray(storedData[collection])) return;
+            const approvedItems = normalizeCollection(collection, storedData[collection]);
+            wikiData[collection].splice(0, wikiData[collection].length, ...approvedItems);
+        });
+    } catch {
+        // Corrupt local data is ignored so the bundled wiki remains usable.
+    }
+}
+
+function saveApprovedWikiData() {
+    localStorage.setItem(STORAGE_KEYS.approvedData, JSON.stringify(cloneData(wikiData)));
+}
+
+function t(key, params = {}) {
+    const dictionary = i18n[currentLanguage] || i18n.es;
+    const fallback = i18n.es[key] || key;
+    return (dictionary[key] || fallback).replace(/\{(\w+)\}/g, (_, name) => safeText(params[name]));
+}
+
+function formatCost(cost) {
+    if (typeof cost === "number") return `${cost.toLocaleString()} SC`;
+    return t("costUnavailable");
+}
+
+function formatStatValue(value, suffix = "") {
+    if (typeof value === "number") return `${value.toLocaleString()}${suffix}`;
+    return safeText(value, "N/A");
+}
+
+function el(tag, options = {}, children = []) {
+    const node = document.createElement(tag);
+
+    Object.entries(options).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === false) return;
+
+        if (key === "className") {
+            node.className = safeText(value);
+        } else if (key === "text") {
+            node.textContent = safeText(value);
+        } else if (key === "dataset") {
+            Object.entries(value).forEach(([dataKey, dataValue]) => {
+                node.dataset[dataKey] = safeText(dataValue);
+            });
+        } else if (key === "attrs") {
+            Object.entries(value).forEach(([attr, attrValue]) => {
+                if (attrValue === null || attrValue === undefined || attrValue === false) return;
+                node.setAttribute(attr, safeText(attrValue));
+            });
+        }
+    });
+
+    children.filter(Boolean).forEach(child => {
+        node.append(child instanceof Node ? child : document.createTextNode(safeText(child)));
+    });
+
+    return node;
+}
+
+function createButton(text, className, onClick) {
+    const button = el("button", { className, text, attrs: { type: "button" } });
+    button.addEventListener("click", onClick);
+    return button;
+}
+
+function createImage(src, alt, className) {
+    return el("img", {
+        className,
+        attrs: {
+            src: safeAssetPath(src),
+            alt: safeText(alt),
+            loading: "lazy",
+            decoding: "async",
+        },
+    });
+}
+
+function replaceChildren(target, children) {
+    target.replaceChildren(...children.filter(Boolean));
+}
+
+// =====================
+// RENDERING
+// =====================
+const renderers = {
+    home: renderHomePage,
+    seeds: renderSeedsPage,
+    gears: renderGearsPage,
+    contributors: renderContributorsPage,
+    extras: renderExtrasPage,
 };
 
+function renderHero(title, copy, imageSrc = "", action = null) {
+    const textColumn = el("div", { className: "hero-copy" }, [
+        el("h2", { text: title }),
+        el("p", { text: copy }),
+    ]);
+
+    if (action) textColumn.append(action);
+
+    const children = [textColumn];
+    if (imageSrc) children.push(createImage(imageSrc, title, "imgg"));
+
+    return el("section", { className: "hero" }, children);
+}
+
+function renderHomePage() {
+    const action = el("a", {
+        className: "primary-action",
+        text: t("playGame"),
+        attrs: {
+            href: "https://www.roblox.com/games/122761763017872/Plant-with-Coding",
+            target: "_blank",
+            rel: "noopener noreferrer",
+        },
+    });
+
+    return [renderHero(t("heroTitle"), t("heroCopy"), "assets/images/image.webp", action)];
+}
+
+function renderSeedsPage() {
+    return [
+        renderHero(t("seedsTitle"), t("seedsCopy")),
+        el("div", { className: "seeds-grid" }, wikiData.seeds.map(renderSeedCard)),
+    ];
+}
+
+function renderSeedCard(seed) {
+    const typeBadge = el("span", { className: `seed-type ${seed.type}`, text: seed.type });
+    const costBadge = el("span", { className: "seed-cost", text: formatCost(seed.cost) });
+    const title = el("h2", { text: seed.name });
+    const header = el("div", { className: "seed-card-header" }, [typeBadge, costBadge, title]);
+    const description = el("p", { className: "seed-desc", text: seed.desc });
+    const button = createButton(t("learnMore"), "seed-btn", () => navigateToSeed(seed.name));
+    const footer = el("div", { className: "seed-footer" }, [button]);
+    const info = el("div", { className: "seed-info" }, [header, description, footer]);
+
+    return el("article", { className: "seed-card" }, [
+        info,
+        createImage(seed.img, seed.name, "seed-img"),
+    ]);
+}
+
+function renderGearsPage() {
+    return [
+        renderHero(t("gearsTitle"), t("gearsCopy")),
+        el("div", { className: "seeds-grid" }, wikiData.gears.map(renderGearCard)),
+    ];
+}
+
+function renderGearCard(gear) {
+    const header = el("div", { className: "seed-card-header" }, [
+        el("span", { className: "seed-cost", text: formatCost(gear.cost) }),
+        el("h2", { text: gear.name }),
+    ]);
+    const footer = el("div", { className: "seed-footer" }, [
+        el("span", { className: "seed-type crop", text: `${t("area")}: ${gear.area}` }),
+        el("span", { className: "seed-type harvestable", text: `${t("duration")}: ${gear.duration}` }),
+    ]);
+
+    return el("article", { className: "seed-card" }, [
+        el("div", { className: "seed-info" }, [
+            header,
+            el("p", { className: "seed-desc", text: gear.effect }),
+            footer,
+        ]),
+        createImage(gear.img, gear.name, "seed-img"),
+    ]);
+}
+
+function renderContributorsPage() {
+    const table = el("table", { className: "contributors-table" }, [
+        el("thead", {}, [
+            el("tr", {}, ["avatar", "name", "role", "link"].map(key => el("th", { text: t(key) }))),
+        ]),
+        el("tbody", {}, wikiData.contributors.map(renderContributorRow)),
+    ]);
+
+    return [
+        el("section", { className: "page-panel" }, [
+            el("h2", { className: "page-title", text: t("contributorsTitle") }),
+            el("p", { className: "page-subtitle", text: t("contributorsCopy") }),
+            el("div", { className: "contributors-table-wrap" }, [table]),
+        ]),
+    ];
+}
+
+function renderContributorRow(contributor) {
+    const avatar = contributor.avatar
+        ? createImage(contributor.avatar, contributor.name || t(contributor.nameKey), "contributor-avatar-image")
+        : el("span", { className: "contributor-avatar", text: contributor.avatarText });
+
+    const displayName = contributor.name || t(contributor.nameKey);
+    const displayRole = contributor.role || t(contributor.roleKey);
+    const linkText = t(contributor.linkKey || "profile");
+    const link = contributor.url
+        ? el("a", { text: linkText, attrs: { href: contributor.url, target: "_blank", rel: "noopener noreferrer", "aria-label": linkText } })
+        : el("span", { className: "muted-link", text: linkText });
+
+    return el("tr", {}, [
+        el("td", {}, [avatar]),
+        el("td", { text: displayName }),
+        el("td", { text: displayRole }),
+        el("td", {}, [link]),
+    ]);
+}
+
+function renderExtrasPage() {
+    const cards = [
+        renderExtraCard(t("wikiAssistants"), t("wikiAssistantsCopy"), t("imageSlot")),
+        renderExtraCard(t("extraTitle", { number: "2" }), t("extraCopy"), t("imageSlot")),
+    ];
+
+    return [
+        el("section", { className: "page-panel" }, [
+            el("h2", { className: "page-title", text: t("extrasTitle") }),
+            el("p", { className: "page-subtitle", text: t("extrasCopy") }),
+            el("div", { className: "extras-grid" }, cards),
+        ]),
+    ];
+}
+
+function renderExtraCard(title, copy, slotText) {
+    return el("article", { className: "extras-card" }, [
+        el("div", { className: "extras-image-slot", text: slotText }),
+        el("div", { className: "extras-card-body" }, [
+            el("h3", { text: title }),
+            el("p", { text: copy }),
+        ]),
+    ]);
+}
+
+function renderSeedDetails(seed) {
+    const stats = el("div", { className: "seed-stats" }, [
+        renderStat(t("valuePerKg"), formatStatValue(seed.stats.valuePerKg, " SC")),
+        renderStat(t("averageWeight"), seed.stats.avgWeight),
+        renderStat(t("growthTime"), seed.stats.growthTime),
+        renderStat(t("averageProfitHarvest"), formatStatValue(seed.stats.avgProfitHarvest, " SC")),
+        renderStat(t("averageProfitMinute"), seed.stats.avgProfitMin),
+    ]);
+
+    return [
+        el("section", { className: "seed-details-hero" }, [
+            createButton(t("backToSeeds"), "back-btn", () => navigateTo("seeds")),
+            el("div", { className: "seed-layout" }, [
+                el("div", { className: "seed-image-box" }, [createImage(seed.img, seed.name, "seed-img")]),
+                el("div", { className: "seed-info" }, [
+                    el("div", { className: "seed-meta" }, [
+                        el("span", { className: `seed-type ${seed.type}`, text: seed.type }),
+                        el("span", { className: "seed-cost", text: formatCost(seed.cost) }),
+                    ]),
+                    el("h2", { className: "seed-name", text: seed.name }),
+                    el("p", { className: "seed-desc", text: seed.desc }),
+                    stats,
+                    el("div", { className: "seed-about" }, [
+                        el("h3", { text: t("about", { name: seed.name }) }),
+                        el("p", { text: seed.about || t("missingAbout") }),
+                    ]),
+                ]),
+            ]),
+        ]),
+    ];
+}
+
+function renderStat(label, value) {
+    return el("div", { className: "stat-box" }, [
+        el("span", { text: label }),
+        el("strong", { text: value }),
+    ]);
+}
+
 // =====================
-// NAVEGACION - cambia el contenido del main
+// NAVIGATION
 // =====================
 function navigateTo(page) {
-    const content = document.getElementById('content');
-    const targetPage = pages[page] ? page : 'home';
+    const content = document.getElementById("content");
+    const safePage = renderers[page] ? page : "home";
 
-    // Si la pagina no existe, mostrar home
-    content.innerHTML = pages[targetPage];
-    setActivePage(targetPage);
+    currentPage = safePage;
+    currentSeedName = "";
+    replaceChildren(content, renderers[safePage]());
+    setActivePage(safePage);
     closeMobileMenus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    history.replaceState(null, "", `#${safePage}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function navigateToSeed(seedName) {
-    const seed = seeds.find(s => s.name === seedName);
-    if (!seed) return;
+    const seed = wikiData.seeds.find(item => item.name === safeText(seedName));
+    if (!seed) {
+        navigateTo("seeds");
+        return;
+    }
 
-    const content = document.getElementById('content');
-
-    const statsHtml = seed.stats ? `
-        <div class="seed-stats">
-            <div class="stat-box">
-                <span>Value/kg</span>
-                <strong>${seed.stats.valuePerKg !== "N/A" ? seed.stats.valuePerKg.toLocaleString() + ' SC' : 'N/A'}</strong>
-            </div>
-            <div class="stat-box">
-                <span>Avg. Weight</span>
-                <strong>${seed.stats.avgWeight}</strong>
-            </div>
-            <div class="stat-box">
-                <span>Growth Time</span>
-                <strong>${seed.stats.growthTime}</strong>
-            </div>
-            <div class="stat-box">
-                <span>Avg. Profit/Harvest</span>
-                <strong>${seed.stats.avgProfitHarvest !== "N/A" ? seed.stats.avgProfitHarvest.toLocaleString() + ' SC' : 'N/A'}</strong>
-            </div>
-            <div class="stat-box">
-                <span>Avg. Profit/Min.</span>
-                <strong>${seed.stats.avgProfitMin}</strong>
-            </div>
-        </div>
-    ` : '';
-
-    content.innerHTML = `
-    <section class="seed-details-hero">
-        <button class="back-btn" onclick="navigateTo('seeds')">
-            <i class="ti ti-arrow-left"></i> Back to seeds
-        </button>
-
-        <div class="seed-layout">
-            <div class="seed-image-box">
-                <img class="seed-img" src="${seed.img}" alt="${seed.name}">
-            </div>
-
-            <div class="seed-info">
-                <div class="seed-meta">
-                    <span class="seed-type ${seed.type.toLowerCase()}">${seed.type}</span>
-                    <span class="seed-cost"><i class="ti ti-coin"></i> ${seed.cost.toLocaleString()} SC</span>
-                </div>
-
-                <h2 class="seed-name">${seed.name}</h2>
-                <p class="seed-desc">${seed.desc}</p>
-
-                ${statsHtml}
-
-                <div class="seed-about">
-                    <h3>About ${seed.name}</h3>
-                    <p>${seed.about || "Detailed information about this plant will be added soon."}</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    `;
-    setActivePage('seeds');
+    const content = document.getElementById("content");
+    currentPage = "seed-details";
+    currentSeedName = seed.name;
+    replaceChildren(content, renderSeedDetails(seed));
+    setActivePage("seeds");
     closeMobileMenus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    history.replaceState(null, "", `#seed/${encodeURIComponent(seed.id)}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function bootRoute() {
+    const hash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+
+    if (hash.startsWith("seed/")) {
+        const seedId = hash.replace("seed/", "");
+        const seed = wikiData.seeds.find(item => item.id === seedId || toSlug(item.name) === seedId);
+        if (seed) {
+            navigateToSeed(seed.name);
+            return;
+        }
+    }
+
+    navigateTo(renderers[hash] ? hash : "home");
+}
+
+function rerenderCurrentView() {
+    updateStaticText();
+
+    if (currentPage === "seed-details" && currentSeedName) {
+        navigateToSeed(currentSeedName);
+        return;
+    }
+
+    navigateTo(currentPage);
 }
 
 function setActivePage(page) {
-    document.querySelectorAll('[data-page]').forEach(item => {
-        item.classList.toggle('active', item.getAttribute('data-page') === page);
+    document.querySelectorAll("[data-page]").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-page") === page);
     });
 }
 
 function closeMobileMenus() {
-    const navbar = document.querySelector('.navbar');
-    const navToggle = document.querySelector('.nav-toggle');
-    const asideToggle = document.querySelector('.aside-toggle');
+    const navbar = document.querySelector(".navbar");
+    const navToggle = document.querySelector(".nav-toggle");
+    const asideToggle = document.querySelector(".aside-toggle");
 
-    navbar?.classList.remove('nav-open');
-    navToggle?.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('sidebar-open');
-    asideToggle?.setAttribute('aria-expanded', 'false');
+    navbar?.classList.remove("nav-open");
+    navToggle?.setAttribute("aria-expanded", "false");
+    document.body?.classList.remove("sidebar-open");
+    asideToggle?.setAttribute("aria-expanded", "false");
 }
 
 // =====================
-// EVENTOS - escucha clicks en los links del sidebar y navbar
+// THEME + I18N
 // =====================
-document.addEventListener('DOMContentLoaded', () => {
-    const navbar = document.querySelector('.navbar');
-    const navToggle = document.querySelector('.nav-toggle');
-    const asideToggle = document.querySelector('.aside-toggle');
+function applyTheme(theme) {
+    currentTheme = SUPPORTED_THEMES.has(theme) ? theme : "dark";
+    document.documentElement.dataset.theme = currentTheme;
+    document.documentElement.style.colorScheme = currentTheme;
 
-    // Cargar home al inicio
-    navigateTo('home');
+    try {
+        localStorage.setItem(STORAGE_KEYS.theme, currentTheme);
+    } catch {
+        // Local storage can be disabled; the live theme still applies.
+    }
 
-    navToggle?.addEventListener('click', () => {
-        const isOpen = navbar.classList.toggle('nav-open');
-        navToggle.setAttribute('aria-expanded', String(isOpen));
+    updateStaticText();
+}
+
+function toggleTheme() {
+    applyTheme(currentTheme === "dark" ? "light" : "dark");
+}
+
+function applyLanguage(language) {
+    currentLanguage = SUPPORTED_LANGUAGES.has(language) ? language : "es";
+    document.documentElement.lang = currentLanguage;
+
+    try {
+        localStorage.setItem(STORAGE_KEYS.language, currentLanguage);
+    } catch {
+        // Local storage can be disabled; the live language still applies.
+    }
+
+    rerenderCurrentView();
+}
+
+function toggleLanguage() {
+    applyLanguage(currentLanguage === "es" ? "en" : "es");
+}
+
+function updateStaticText() {
+    document.querySelectorAll("[data-i18n]").forEach(node => {
+        node.textContent = t(node.dataset.i18n);
     });
 
-    asideToggle?.addEventListener('click', () => {
-        const isOpen = document.body.classList.toggle('sidebar-open');
-        asideToggle.setAttribute('aria-expanded', String(isOpen));
+    document.querySelectorAll("[data-i18n-aria]").forEach(node => {
+        node.setAttribute("aria-label", t(node.dataset.i18nAria));
     });
 
-    // Escuchar todos los links con data-page
-    document.querySelectorAll('[data-page]').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault(); // evita que el href recargue la pagina
-            const page = link.getAttribute('data-page');
-            navigateTo(page);
-        });
+    const themeButton = document.querySelector("[data-action='toggle-theme']");
+    if (themeButton) themeButton.textContent = currentTheme === "dark" ? t("lightMode") : t("darkMode");
+
+    const languageButton = document.querySelector("[data-action='toggle-language']");
+    if (languageButton) languageButton.textContent = currentLanguage === "es" ? "EN" : "ES";
+}
+
+// =====================
+// DISCORD APPROVAL PIPELINE
+// =====================
+function getPendingChanges() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEYS.pendingChanges) || "[]");
+        return Array.isArray(stored) ? stored : [];
+    } catch {
+        return [];
+    }
+}
+
+function savePendingChanges(changes) {
+    localStorage.setItem(STORAGE_KEYS.pendingChanges, JSON.stringify(changes));
+}
+
+function getDiscordWebhookUrl() {
+    try {
+        return localStorage.getItem(STORAGE_KEYS.webhookUrl) || "";
+    } catch {
+        return "";
+    }
+}
+
+function setDiscordWebhookUrl(url) {
+    const parsedUrl = safeUrl(url);
+    if (!parsedUrl || !parsedUrl.startsWith("https://discord.com/api/webhooks/")) {
+        throw new Error("Invalid Discord webhook URL.");
+    }
+
+    localStorage.setItem(STORAGE_KEYS.webhookUrl, parsedUrl);
+}
+
+async function proposeWikiChange(changeType, targetEntity, beforeValue, afterValue) {
+    if (!CHANGE_TYPES.has(changeType)) throw new Error("Unsupported change type.");
+    const collection = safeText(targetEntity?.collection);
+    if (!ENTITY_COLLECTIONS.has(collection)) throw new Error("Unsupported target entity.");
+
+    const targetId = toSlug(targetEntity?.id || beforeValue?.id || afterValue?.id || beforeValue?.name || afterValue?.name);
+    const before = beforeValue ? normalizeEntity(collection, beforeValue) : null;
+    const after = afterValue ? normalizeEntity(collection, afterValue) : null;
+
+    const proposal = {
+        changeId: crypto.randomUUID ? crypto.randomUUID() : `change-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        changeType,
+        targetEntity: { collection, id: targetId },
+        before: cloneData(before),
+        after: cloneData(after),
+        timestamp: new Date().toISOString(),
+        status: "pending",
+    };
+
+    const pendingChanges = getPendingChanges();
+    pendingChanges.push(proposal);
+    savePendingChanges(pendingChanges);
+
+    await sendChangeProposalToDiscord(proposal);
+    return cloneData(proposal);
+}
+
+async function sendChangeProposalToDiscord(proposal) {
+    const webhookUrl = getDiscordWebhookUrl();
+    if (!webhookUrl) return { skipped: true, reason: "webhook-not-configured" };
+
+    const payload = {
+        username: "PwC Wiki Approval",
+        allowed_mentions: { parse: [] },
+        content: `Wiki change proposal ${proposal.changeId}`,
+        embeds: [
+            {
+                title: "Wiki Change Proposal",
+                color: 5763719,
+                fields: [
+                    { name: "Change ID", value: proposal.changeId, inline: false },
+                    { name: "Type", value: proposal.changeType, inline: true },
+                    { name: "Target", value: `${proposal.targetEntity.collection}/${proposal.targetEntity.id}`, inline: true },
+                    { name: "Timestamp", value: proposal.timestamp, inline: false },
+                    { name: "Before", value: truncateForDiscord(JSON.stringify(proposal.before, null, 2)), inline: false },
+                    { name: "After", value: truncateForDiscord(JSON.stringify(proposal.after, null, 2)), inline: false },
+                ],
+            },
+        ],
+    };
+
+    const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error("Discord webhook delivery failed.");
+    return { delivered: true };
+}
+
+function truncateForDiscord(value) {
+    const text = safeText(value, "null");
+    return text.length > 950 ? `${text.slice(0, 947)}...` : text;
+}
+
+function approveChange(changeId) {
+    const safeChangeId = safeText(changeId);
+    const pendingChanges = getPendingChanges();
+    const proposal = pendingChanges.find(change => change.changeId === safeChangeId && change.status === "pending");
+    if (!proposal) return false;
+
+    applyApprovedChange(proposal);
+    proposal.status = "approved";
+    proposal.approvedAt = new Date().toISOString();
+    savePendingChanges(pendingChanges);
+    saveApprovedWikiData();
+    rerenderCurrentView();
+    return true;
+}
+
+function rejectChange(changeId) {
+    const safeChangeId = safeText(changeId);
+    const pendingChanges = getPendingChanges();
+    const proposal = pendingChanges.find(change => change.changeId === safeChangeId && change.status === "pending");
+    if (!proposal) return false;
+
+    proposal.status = "rejected";
+    proposal.rejectedAt = new Date().toISOString();
+    savePendingChanges(pendingChanges);
+    return true;
+}
+
+function applyApprovedChange(proposal) {
+    const { collection, id } = proposal.targetEntity;
+    const targetCollection = wikiData[collection];
+    const index = targetCollection.findIndex(item => item.id === id);
+
+    if (proposal.changeType === "add") {
+        if (index === -1 && proposal.after) targetCollection.push(normalizeEntity(collection, proposal.after));
+        return;
+    }
+
+    if (proposal.changeType === "edit") {
+        if (index !== -1 && proposal.after) targetCollection[index] = normalizeEntity(collection, proposal.after);
+        return;
+    }
+
+    if (proposal.changeType === "delete" && index !== -1) {
+        targetCollection.splice(index, 1);
+    }
+}
+
+function requestWikiChange(changeType, collection, entity) {
+    const normalizedCollection = safeText(collection);
+    if (!ENTITY_COLLECTIONS.has(normalizedCollection)) throw new Error("Unsupported entity collection.");
+
+    const normalizedEntity = entity ? normalizeEntity(normalizedCollection, entity) : null;
+    const existing = normalizedEntity
+        ? wikiData[normalizedCollection].find(item => item.id === normalizedEntity.id)
+        : null;
+
+    if (changeType === "add") return proposeWikiChange("add", { collection: normalizedCollection, id: normalizedEntity?.id }, null, normalizedEntity);
+    if (changeType === "edit") return proposeWikiChange("edit", { collection: normalizedCollection, id: normalizedEntity?.id }, existing, normalizedEntity);
+    if (changeType === "delete") return proposeWikiChange("delete", { collection: normalizedCollection, id: normalizedEntity?.id }, existing, null);
+    throw new Error("Unsupported change type.");
+}
+
+// =====================
+// EVENTS
+// =====================
+document.addEventListener("DOMContentLoaded", () => {
+    const navbar = document.querySelector(".navbar");
+    const navToggle = document.querySelector(".nav-toggle");
+    const asideToggle = document.querySelector(".aside-toggle");
+
+    applyTheme(currentTheme);
+    document.documentElement.lang = currentLanguage;
+    updateStaticText();
+    bootRoute();
+
+    navToggle?.addEventListener("click", () => {
+        const isOpen = navbar?.classList.toggle("nav-open") || false;
+        navToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    asideToggle?.addEventListener("click", () => {
+        const isOpen = document.body.classList.toggle("sidebar-open");
+        asideToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    document.addEventListener("click", event => {
+        const clickTarget = event.target instanceof Element ? event.target : null;
+        if (!clickTarget) return;
+
+        const actionTarget = clickTarget.closest("[data-action]");
+        if (actionTarget?.dataset.action === "toggle-theme") {
+            toggleTheme();
+            return;
+        }
+
+        if (actionTarget?.dataset.action === "toggle-language") {
+            toggleLanguage();
+            return;
+        }
+
+        const routeTarget = clickTarget.closest("[data-page]");
+        if (routeTarget) {
+            event.preventDefault();
+            navigateTo(routeTarget.getAttribute("data-page"));
+        }
     });
 });
 
-document.addEventListener('error', (event) => {
-    const image = event.target;
+window.addEventListener("hashchange", bootRoute);
 
-    if (image instanceof HTMLImageElement && image.classList.contains('seed-img')) {
-        const fallback = document.createElement('div');
-        fallback.className = `${image.className} image-fallback`;
-        fallback.textContent = image.alt || 'Image unavailable';
-        image.replaceWith(fallback);
-    }
+document.addEventListener("error", event => {
+    const image = event.target;
+    if (!(image instanceof HTMLImageElement)) return;
+
+    const fallback = el("div", {
+        className: `${image.className} image-fallback`,
+        text: image.alt || t("imageUnavailable"),
+    });
+    image.replaceWith(fallback);
 }, true);
+
+window.navigateTo = navigateTo;
+window.navigateToSeed = navigateToSeed;
+window.approveChange = approveChange;
+window.rejectChange = rejectChange;
+window.requestWikiChange = requestWikiChange;
+window.proposeWikiChange = proposeWikiChange;
+window.setDiscordWebhookUrl = setDiscordWebhookUrl;

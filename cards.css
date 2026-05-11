@@ -11,8 +11,8 @@
     gap: 18px;
     padding: 18px;
     border: 1px solid var(--border-color);
-    border-radius: 16px;
-    background: linear-gradient(180deg, rgba(21, 27, 33, 0.88), rgba(13, 17, 22, 0.94));
+    border-radius: 14px;
+    background: var(--panel-bg);
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
     transition: transform 170ms ease, border-color 170ms ease, background-color 170ms ease, box-shadow 170ms ease;
 }
@@ -37,7 +37,7 @@
 .seed-card h2 {
     width: 100%;
     margin: 8px 0 0;
-    color: #fff;
+    color: var(--heading-color);
     font-size: 1.4rem;
     line-height: 1.15;
 }
@@ -50,7 +50,7 @@
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.035);
+    background: var(--surface-soft);
     object-fit: contain;
 }
 
@@ -98,7 +98,7 @@
     transform: translateY(-1px);
     border-color: rgba(104, 211, 145, 0.45);
     background: var(--accent-soft);
-    color: #fff;
+    color: var(--heading-color);
 }
 
 .seed-type,
@@ -139,8 +139,8 @@
 .seed-details-hero {
     padding: clamp(18px, 3vw, 28px);
     border: 1px solid var(--border-color);
-    border-radius: 18px;
-    background: linear-gradient(180deg, rgba(21, 27, 33, 0.9), rgba(13, 17, 22, 0.94));
+    border-radius: 16px;
+    background: var(--panel-bg);
 }
 
 .back-btn {
@@ -165,7 +165,7 @@
     padding: 28px;
     border: 1px solid var(--border-color);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.035);
+    background: var(--surface-soft);
 }
 
 .seed-image-box .seed-img {
@@ -186,7 +186,7 @@
 
 .seed-name {
     margin: 0 0 14px;
-    color: #fff;
+    color: var(--heading-color);
     font-size: clamp(2rem, 4vw, 3.8rem);
     line-height: 1;
     letter-spacing: 0;
@@ -210,7 +210,7 @@
     padding: 16px;
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.035);
+    background: var(--surface-soft);
 }
 
 .stat-box {
@@ -228,7 +228,7 @@
 }
 
 .stat-box strong {
-    color: #fff;
+    color: var(--heading-color);
     font-size: 1rem;
 }
 
@@ -236,7 +236,7 @@
     margin: 26px 0 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
-    color: #fff;
+    color: var(--heading-color);
     font-size: 1rem;
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" data-theme="dark">
 
 <head>
     <link rel="stylesheet" href="style.css">
@@ -12,26 +12,30 @@
 <body>
     <header class="header">
         <nav class="navbar" aria-label="Primary navigation">
-            <a class="brand" href="#" data-page="home">PwC Wiki</a>
-            <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+            <a class="brand" href="#" data-page="home" data-i18n="appTitle">PwC Wiki</a>
+            <button class="nav-toggle" type="button" aria-label="Abrir navegacion" data-i18n-aria="openNavigation" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
             <ul class="nav-menu">
-                <li data-page="seeds"><a href="#">Seeds</a></li>
-                <li data-page="gears"><a href="#">Gears</a></li>
+                <li data-page="seeds"><a href="#" data-i18n="seeds">Semillas</a></li>
+                <li data-page="gears"><a href="#" data-i18n="gears">Herramientas</a></li>
             </ul>
+            <div class="shell-controls" aria-label="Controles de visualizacion" data-i18n-aria="displayControls">
+                <button class="control-btn" type="button" data-action="toggle-theme" data-i18n-aria="themeToggle" aria-label="Cambiar tema">Claro</button>
+                <button class="control-btn" type="button" data-action="toggle-language" data-i18n-aria="languageToggle" aria-label="Cambiar idioma">EN</button>
+            </div>
         </nav>
     </header>
-    <button class="aside-toggle" type="button" aria-label="Toggle sidebar" aria-expanded="false">Menu</button>
+    <button class="aside-toggle" type="button" aria-label="Alternar barra lateral" data-i18n-aria="toggleSidebar" aria-expanded="false" data-i18n="menu">Menu</button>
     <div class="layout">
         <aside class="asidebar">
             <nav aria-label="Secondary navigation">
                 <ul>
-                    <li data-page="contributors"><a href="#">Contributors</a></li>
-                    <li data-page="extras"><a href="#">Extras</a></li>
-                    <li><a href="https://discord.gg/ntXCccpEWa" target="_blank" rel="noopener noreferrer">Discord</a></li>
+                    <li data-page="contributors"><a href="#" data-i18n="contributors">Colaboradores</a></li>
+                    <li data-page="extras"><a href="#" data-i18n="extras">Extras</a></li>
+                    <li><a href="https://discord.gg/ntXCccpEWa" target="_blank" rel="noopener noreferrer" data-i18n="discord">Discord</a></li>
                 </ul>
             </nav>
         </aside>
@@ -39,9 +43,11 @@
         <main>
             <div class="main-information" id="content">
                 <section class="hero">
-                    <h2>Plant with Code [BETA]</h2>
-                    <p>Plant with Coding is a game created by the Roblox group Lated Graham, founded by TheEmreTutuk, which is based on Grow a Garden but with Luau coding.</p>
-                    <img class="imgg" src="assets/images/image.webp" alt="img">
+                    <div class="hero-copy">
+                        <h2>Plant with Code [BETA]</h2>
+                        <p>Plant with Coding es un juego creado por el grupo de Roblox Lated Graham, fundado por TheEmreTutuk, basado en Grow a Garden pero con programacion Luau.</p>
+                    </div>
+                    <img class="imgg" src="assets/images/image.webp" alt="Plant with Code">
                 </section>
             </div>
         </main>
