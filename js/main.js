@@ -3,22 +3,22 @@
 // =====================
 const seeds = [
     {
-        name: "Wheat", type: "Crop", cost: 20, desc: "A basic crop, great for beginners.", img: "../../assets/images/wheat.png",
+        name: "Wheat", type: "Crop", cost: 20, desc: "A basic crop, great for beginners.", img: "/assets/images/wheat.png",
         stats: { valuePerKg: 15, avgWeight: "3.00kg", growthTime: "4.50 sec", avgProfitHarvest: 25, avgProfitMin: "333 SC/Min." },
         about: "Wheat is the staple crop for any beginner farmer. It grows quickly and provides a steady income, making it the perfect starting point for learning the ropes of agriculture. Despite its low value, its rapid growth cycle means you can harvest it frequently."
     },
     {
-        name: "Potato", type: "Crop", cost: 40, desc: "A reliable crop with decent yield.", img: "../../assets/images/potato.png",
+        name: "Potato", type: "Crop", cost: 40, desc: "A reliable crop with decent yield.", img: "./assets/images/potato.png",
         stats: { valuePerKg: 30, avgWeight: "N/A", growthTime: "N/A", avgProfitHarvest: "N/A", avgProfitMin: "N/A" },
         about: "Potatoes are hearty and reliable. They take a bit more investment than wheat but yield a significantly higher value per kilogram. A solid choice for farmers looking to expand their operations."
     },
     {
-        name: "Carrot", type: "Crop", cost: 80, desc: "Fast growing and easy to harvest.", img: "../../assets/images/carrot.png",
+        name: "Carrot", type: "Crop", cost: 80, desc: "Fast growing and easy to harvest.", img: "./assets/images/carrot.png",
         stats: { valuePerKg: 110, avgWeight: "N/A", growthTime: "N/A", avgProfitHarvest: "N/A", avgProfitMin: "N/A" },
         about: "Carrots offer a huge jump in value per kilogram compared to early crops. They are bright, nutritious, and very rewarding for those willing to pay the higher seed cost."
     },
     {
-        name: "Bush", type: "Crop", cost: 100, desc: "A simple bush crop.", img: "../../assets/images/tree.png",
+        name: "Bush", type: "Crop", cost: 100, desc: "A simple bush crop.", img: "./assets/images/tree.png",
         stats: { valuePerKg: 250, avgWeight: "N/A", growthTime: "N/A", avgProfitHarvest: "N/A", avgProfitMin: "N/A" },
         about: "Bushes are easy to maintain and provide a very respectable value. They represent the transition from basic ground crops to more permanent agricultural structures."
     },
