@@ -11,38 +11,37 @@
 
 <body>
     <header class="header">
-        <!-- Secciones dentro del juego ---------------------------------------------------------------->
-        <nav class="navbar">
-            <ul>
-                <li class="seedsLi" data-page="seeds"><a href="#">seeds</a></li>
-                <li class="gearsLi" data-page="gears"><a href="#">gears</a></li>
+        <nav class="navbar" aria-label="Primary navigation">
+            <a class="brand" href="#" data-page="home">PwC Wiki</a>
+            <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li data-page="seeds"><a href="#">Seeds</a></li>
+                <li data-page="gears"><a href="#">Gears</a></li>
             </ul>
         </nav>
     </header>
-    <!-- Layout  -->
+    <button class="aside-toggle" type="button" aria-label="Toggle sidebar" aria-expanded="false">Menu</button>
     <div class="layout">
-        <!-- Aside bar ---------------------------------------------------------------------------------->
         <aside class="asidebar">
-            <nav>
+            <nav aria-label="Secondary navigation">
                 <ul>
-                    <li><a href="#">Contributors</a></li>
-                    <li><a href="#">Discord</a></li>
-                    <li><a href="#">Placeholder</a></li>
-                    <li><a href="#">Placeholder</a></li>
+                    <li data-page="contributors"><a href="#">Contributors</a></li>
+                    <li data-page="extras"><a href="#">Extras</a></li>
+                    <li><a href="https://discord.gg/ntXCccpEWa" target="_blank" rel="noopener noreferrer">Discord</a></li>
                 </ul>
             </nav>
         </aside>
 
         <main>
-            <!-- Game principal sections --------------------------------------------------------------->
             <div class="main-information" id="content">
                 <section class="hero">
-                    <h2>Plant whit Code [BETA]</h2>
-                    <p>Plant whit Coding is a game created by the roblox group <br>
-                        Lated graham founded by TheEmreTutuk which is based <br>
-                        on Grow a Garden but with Luau coding</p>
+                    <h2>Plant with Code [BETA]</h2>
+                    <p>Plant with Coding is a game created by the Roblox group Lated Graham, founded by TheEmreTutuk, which is based on Grow a Garden but with Luau coding.</p>
                     <img class="imgg" src="assets/images/image.webp" alt="img">
-                    <button> Play Now</button>
                 </section>
             </div>
         </main>

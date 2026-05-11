@@ -123,10 +123,19 @@ const seeds = [
         about: "The Lemon tree is the crown jewel of any master farmer. With an astronomical seed cost, it represents the absolute pinnacle of agricultural achievement and wealth."
     },
     {
-        name:"Glitch", type: "Harvestable", cost: "???", desc: "Glitch is a extremely rare fruit that only appears on [Unknow] lorem ipsum...", img: "assets/images/glitch.png",
-        stats: { valuePerKg: 1111, avgWeight: "4.7kg", growthTime: "--- secs", avgProfitHarvest: 1111, avgProfitMin: "1100 SC/Min" },
-        about: "Lorem ipsum insert description..."
+        name: "Glitch", type: "Harvestable", cost: "N/A", desc: "Glitch is a extremely rare fruit that only appears on [Unknow]...", img: "assets/images/glitch.png",
+        stats: { valuePerKg: 1111, avgWeight: "4.7kg", growthTime: "N/A secs", avgProfitHarvest: "N/A", avgProfitMin: "N/A SC/Min" },
+        about: "Technically obtainable, but the obtain method is unknow"
     }
+];
+
+const gears = [
+    { name: "Watering Can", cost: 100,    effect: "Growth Speed +125%", area: "1x1", duration: "1 Min",  img: "assets/images/watering_can.png" },
+    { name: "Fertilizer",   cost: 750,    effect: "Growth Speed +200%", area: "1x1", duration: "2 Min",  img: "assets/images/fertilizer.png" },
+    { name: "Sprinkler",    cost: 1500,   effect: "Growth Speed +150%", area: "3x3", duration: "10 Min", img: "assets/images/sprinkler.png" },
+    { name: "SprinklerV2",  cost: 5000,   effect: "Growth Speed +200%", area: "5x5", duration: "15 Min", img: "assets/images/sprinklerv2.png" },
+    { name: "SprinklerV3",  cost: 20000,  effect: "Growth Speed +300%", area: "7x7", duration: "20 Min", img: "assets/images/sprinklerv3.png" },
+    { name: "Lightning Rod", cost: 30000, effect: "Attracts Lightning",  area: "1x1", duration: "15 Min", img: "assets/images/lightning_rod.png" },
 ];
 
 // =====================
@@ -142,7 +151,7 @@ const pages = {
             Lated Graham, founded by TheEmreTutuk, which is based
             on Grow a Garden but with Luau coding.</p>
             <img class="imgg" src="assets/images/image.webp" alt="img">
-            <button onclick="navigateTo('seeds')">View Seeds</button>
+            <button><a href="https://www.roblox.com/games/122761763017872/Plant-with-Coding">Play Plant with Coding</a></button>
         </section>
     `,
 
@@ -171,7 +180,99 @@ const pages = {
             </div>
         `).join('')}
     </div>
-`,
+    `,
+
+    // Pagina para las Gears
+    gears: `
+        <section class="hero">
+            <h2>Gears</h2>
+            <p>All available gears in Plant with Code.</p>
+        </section>
+        <div class="seeds-grid">
+            ${gears.map(gear => `
+                <div class="seed-card">
+                    <div class="seed-info">
+                        <div class="seed-card-header">
+                            <span class="seed-cost">${gear.cost.toLocaleString()} SC</span>
+                            <h2>${gear.name}</h2>
+                        </div>
+                        <p class="seed-desc">${gear.effect}</p>
+                        <div class="seed-footer">
+                            <span class="seed-type crop">Area: ${gear.area}</span>
+                            <span class="seed-type harvestable">⏱ ${gear.duration}</span>
+                        </div>
+                    </div>
+                    <img class="seed-img" src="${gear.img}" alt="${gear.name}">
+                </div>
+            `).join('')}
+        </div>
+    `,
+
+    contributors: `
+        <section class="page-panel">
+            <h2 class="page-title">Contributors</h2>
+            <p class="page-subtitle">Example rows ready to replace with real community members.</p>
+            <div class="contributors-table-wrap">
+                <table class="contributors-table">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="contributor-avatar">Z</span></td>
+                            <td>Zyre</td>
+                            <td>Wiki Founder</td>
+                            <td><a href="https://www.roblox.com/users/1622167860/profile" aria-label="Contributor profile">Roblox Profile</a></td>
+                        </tr>
+                        <tr>
+                            <td><span class="contributor-avatar">B</span></td>
+                            <td>Contributor Name</td>
+                            <td>Data editor</td>
+                            <td><a href="#" aria-label="Contributor profile">Profile</a></td>
+                        </tr>
+                        <tr>
+                            <td><span class="contributor-avatar">C</span></td>
+                            <td>Contributor Name</td>
+                            <td>UI contributor</td>
+                            <td><a href="#" aria-label="Contributor profile">Profile</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    `,
+
+    extras: `
+        <section class="page-panel">
+            <h2 class="page-title">Extras</h2>
+            <p class="page-subtitle">Some extra cards where wiki info goes and i dunno...</p>
+            <div class="extras-grid">
+                ${[1].map(number => `
+                    <article class="extras-card">
+                        <div class="extras-image-slot">Insert claude image</div>
+                        <div class="extras-card-body">
+                            <h3>Wiki Assistants</h3>
+                            <p>So the founder decided to get support on a AI for the web design, the wiki is NOT fully made on AI</p>
+                        </div>
+                    </article>
+                `).join('')}
+                ${[2].map(number => `
+                    <article class="extras-card">
+                        <div class="extras-image-slot">Image ${number}</div>
+                        <div class="extras-card-body">
+                            <h3>Extra title ${number}</h3>
+                            <p>HmkfnsjkdfnsdfAT</p>
+                        </div>
+                    </article>
+                `).join('')}
+            </div>
+        </section>
+    `,
 };
 
 // =====================
@@ -179,14 +280,13 @@ const pages = {
 // =====================
 function navigateTo(page) {
     const content = document.getElementById('content');
+    const targetPage = pages[page] ? page : 'home';
 
     // Si la pagina no existe, mostrar home
-    if (!pages[page]) {
-        content.innerHTML = pages['home'];
-        return;
-    }
-
-    content.innerHTML = pages[page];
+    content.innerHTML = pages[targetPage];
+    setActivePage(targetPage);
+    closeMobileMenus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function navigateToSeed(seedName) {
@@ -194,66 +294,104 @@ function navigateToSeed(seedName) {
     if (!seed) return;
 
     const content = document.getElementById('content');
-    
+
     const statsHtml = seed.stats ? `
-        <div class="seed-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; margin-bottom: 25px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid #3a3a3a;">
+        <div class="seed-stats">
             <div class="stat-box">
-                <span style="display: block; color: #848484; font-size: 0.9rem; margin-bottom: 5px;">Value/kg</span>
-                <strong style="color: #fff; font-size: 1.1rem;">${seed.stats.valuePerKg !== "N/A" ? seed.stats.valuePerKg.toLocaleString() + ' SC' : 'N/A'}</strong>
+                <span>Value/kg</span>
+                <strong>${seed.stats.valuePerKg !== "N/A" ? seed.stats.valuePerKg.toLocaleString() + ' SC' : 'N/A'}</strong>
             </div>
             <div class="stat-box">
-                <span style="display: block; color: #848484; font-size: 0.9rem; margin-bottom: 5px;">Avg. Weight</span>
-                <strong style="color: #fff; font-size: 1.1rem;">${seed.stats.avgWeight}</strong>
+                <span>Avg. Weight</span>
+                <strong>${seed.stats.avgWeight}</strong>
             </div>
             <div class="stat-box">
-                <span style="display: block; color: #848484; font-size: 0.9rem; margin-bottom: 5px;">Growth Time</span>
-                <strong style="color: #fff; font-size: 1.1rem;">${seed.stats.growthTime}</strong>
+                <span>Growth Time</span>
+                <strong>${seed.stats.growthTime}</strong>
             </div>
             <div class="stat-box">
-                <span style="display: block; color: #848484; font-size: 0.9rem; margin-bottom: 5px;">Avg. Profit/Harvest</span>
-                <strong style="color: #fff; font-size: 1.1rem;">${seed.stats.avgProfitHarvest !== "N/A" ? seed.stats.avgProfitHarvest.toLocaleString() + ' SC' : 'N/A'}</strong>
+                <span>Avg. Profit/Harvest</span>
+                <strong>${seed.stats.avgProfitHarvest !== "N/A" ? seed.stats.avgProfitHarvest.toLocaleString() + ' SC' : 'N/A'}</strong>
             </div>
             <div class="stat-box">
-                <span style="display: block; color: #848484; font-size: 0.9rem; margin-bottom: 5px;">Avg. Profit/Min.</span>
-                <strong style="color: #fff; font-size: 1.1rem;">${seed.stats.avgProfitMin}</strong>
+                <span>Avg. Profit/Min.</span>
+                <strong>${seed.stats.avgProfitMin}</strong>
             </div>
         </div>
     ` : '';
 
     content.innerHTML = `
-        <section class="hero seed-details-hero">
-            <button onclick="navigateTo('seeds')" class="seed-btn" style="background-color: transparent; color: var(--text-color); border: 1px solid #3a3a3a; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 14px; margin-bottom: 20px; transition: border-color 0.3s ease, color 0.3s ease;">⬅ Back to Seeds</button>
-            <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
-                <div style="background: rgba(255,255,255,0.02); padding: 30px; border-radius: 16px; border: 1px solid #2a2a2a; display: flex; justify-content: center; align-items: center; min-width: 250px;">
-                    <img class="seed-img" src="${seed.img}" alt="${seed.name}" style="width: 250px; height: auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
-                </div>
-                <div style="flex: 1; min-width: 300px;">
-                    <div class="seed-card-header" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                        <span class="seed-type ${seed.type.toLowerCase()}" style="padding: 5px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">${seed.type}</span>
-                        <span class="seed-cost" style="color: #ffd700; font-weight: bold; font-size: 1.1rem;">💰 ${seed.cost.toLocaleString()} SC</span>
-                    </div>
-                    <h2 style="font-size: 3rem; margin-top: 0; margin-bottom: 15px; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${seed.name}</h2>
-                    <p style="color: #a0a0a0; font-size: 1.2rem; margin-bottom: 20px; border-left: 4px solid #4a4a4a; padding-left: 15px; line-height: 1.5;">${seed.desc}</p>
-                    
-                    ${statsHtml}
+    <section class="seed-details-hero">
+        <button class="back-btn" onclick="navigateTo('seeds')">
+            <i class="ti ti-arrow-left"></i> Back to seeds
+        </button>
 
-                    <h3 style="margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #3a3a3a; padding-bottom: 10px; color: #e0e0e0;">About ${seed.name}</h3>
-                    <p style="line-height: 1.7; color: #b0b0b0; font-size: 1.05rem;">
-                        ${seed.about || "Detailed information about this plant will be added soon."}
-                    </p>
+        <div class="seed-layout">
+            <div class="seed-image-box">
+                <img class="seed-img" src="${seed.img}" alt="${seed.name}">
+            </div>
+
+            <div class="seed-info">
+                <div class="seed-meta">
+                    <span class="seed-type ${seed.type.toLowerCase()}">${seed.type}</span>
+                    <span class="seed-cost"><i class="ti ti-coin"></i> ${seed.cost.toLocaleString()} SC</span>
+                </div>
+
+                <h2 class="seed-name">${seed.name}</h2>
+                <p class="seed-desc">${seed.desc}</p>
+
+                ${statsHtml}
+
+                <div class="seed-about">
+                    <h3>About ${seed.name}</h3>
+                    <p>${seed.about || "Detailed information about this plant will be added soon."}</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     `;
+    setActivePage('seeds');
+    closeMobileMenus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setActivePage(page) {
+    document.querySelectorAll('[data-page]').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-page') === page);
+    });
+}
+
+function closeMobileMenus() {
+    const navbar = document.querySelector('.navbar');
+    const navToggle = document.querySelector('.nav-toggle');
+    const asideToggle = document.querySelector('.aside-toggle');
+
+    navbar?.classList.remove('nav-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('sidebar-open');
+    asideToggle?.setAttribute('aria-expanded', 'false');
 }
 
 // =====================
 // EVENTOS - escucha clicks en los links del sidebar y navbar
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
+    const navbar = document.querySelector('.navbar');
+    const navToggle = document.querySelector('.nav-toggle');
+    const asideToggle = document.querySelector('.aside-toggle');
 
     // Cargar home al inicio
     navigateTo('home');
+
+    navToggle?.addEventListener('click', () => {
+        const isOpen = navbar.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    asideToggle?.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('sidebar-open');
+        asideToggle.setAttribute('aria-expanded', String(isOpen));
+    });
 
     // Escuchar todos los links con data-page
     document.querySelectorAll('[data-page]').forEach(link => {
@@ -264,3 +402,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+document.addEventListener('error', (event) => {
+    const image = event.target;
+
+    if (image instanceof HTMLImageElement && image.classList.contains('seed-img')) {
+        const fallback = document.createElement('div');
+        fallback.className = `${image.className} image-fallback`;
+        fallback.textContent = image.alt || 'Image unavailable';
+        image.replaceWith(fallback);
+    }
+}, true);
